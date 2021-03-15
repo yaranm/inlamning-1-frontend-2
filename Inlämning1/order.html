@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produkten du valt</title>
+    <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+    <h1>Produkten du har valt</h1>
+    <div id="output"></div>
+    <div id="comfirm"></div>
+    
+      <!--the code creates a form and what should be included in the form.
+         I prepare a validate form so that the user has to fill in correctly
+        Once everything is filled out correctly the form will send us to klar.html-->
+      <form name="myForm" action="klar.html" onsubmit="return validateForm()">
+        Name: <input type="text" name="fname" >
+        <div id="felNamn"></div> 
+        <br>
+        Telefon: <input type="number" name="telefon" >
+        <div id="felTelefon"></div>
+        <br>
+        e-post: <input type="email" name="epost" >
+        <div id="felEpost"></div>
+        <br>
+        Adress: <input type="text" name="adress" >
+        <div id="felAdress"></div>
+        <br>
+        <input type="submit" value="Beställ">
+        </form>
+
+      
+        <script>
+      //here we retrieve the productid from localstorage
+    let productId = localStorage.getItem("produktId");
+   
+          //now the code retrieves all products but selects the exact product id the user has selected
+      fetch('https://fakestoreapi.com/products/' + productId)
+            .then(res=>res.json())
+            .then((produkt) => render(produkt));
+
+
+
+            /*Now we want to show what the user has chosen for the product. 
+            * Here we show the same product info as on index.html
+            */
+            function render(produkt) {
+        console.log(produkt); 
+        let output="";
+        output= 
+        
+            `
+            <div><h2>${produkt.title}</h2></div>
+            <div><b>pris:</b>${produkt.price} ;-</div>
+            <div><b>Beskrivning:</b>${produkt.description}</div>
+            <div><img src="${produkt.image}" width="100" height="100"></div>
+            <hr>`;
+
+            //this line prints which product the user has selected
+            document.getElementById("output").innerHTML =  output;
+        }
+
+         /* Form validation code will come here.
+         * the code checks that the user has filled in all the fields in the form
+         */
+         function validateForm() {
+  var x = document.forms["myForm"]["fname"].value;
+  var y = document.forms["myForm"]["adress"].value;
+  var t = document.forms["myForm"]["telefon"].value;
+  var e = document.forms["myForm"]["epost"].value;
+  if (x == "") {
+    document.getElementById("felNamn").innerHTML =  " Du har inte angett namn";
+    return false; 
+  }
+  if (t == "") {
+    document.getElementById("felTelefon").innerHTML =  " Du har inte angett telefon";
+    return false;
+  } 
+  if (e == "") {
+    document.getElementById("felEpost").innerHTML =  " Du har inte angett e-post";
+    return false;
+  }
+  if (y == "") {
+    document.getElementById("felAdress").innerHTML =  " Du har inte angett adress";
+    return false;
+  }
+}
+
+    </script>
+  
+</body>
+</html>

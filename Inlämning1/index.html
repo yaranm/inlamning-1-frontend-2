@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>inlupp 1</title>
+  </head>
+  <body>
+    <h1>Shop</h1>
+
+    <div id="output"></div>
+    
+
+    <script>
+      /*
+      *the code retrieves all products from fakestoreapi
+      */
+        fetch("https://fakestoreapi.com/products")
+        .then((resp) => resp.json())
+        .then((data) => render(data))
+        .catch((err) => console.error(err));
+           
+
+      /*
+      *here we choose what to show of the product. 
+      *in this case we want to show the title, price, description 
+      *and a picture of the product
+      */
+      function render(produkter) {
+        console.log(produkter);
+        
+        let output = "";
+        produkter.forEach((produkt) => output += `
+            
+            <div><h2>${produkt.title}</h2></div>
+            <div><b>pris:</b>${produkt.price} ;-</div>
+            <div><b>Beskrivning:</b>${produkt.description}</div>
+            <div><img src="${produkt.image}" width="100" height="100"></div>
+            <div><button id="buy" role="button" onclick="gaTillBest(${produkt.id})">Köp</button></div>
+            <hr>
+            `
+            );
+            
+            
+          //This particular line prints all products what we have chosen to show from fakestoreapi
+        document.getElementById("output").innerHTML = output;
+      }
+
+
+      /*
+      *We store the product id in localstorage so we can use it next page.
+      *then this code will send you to order.html file.
+      */
+      function gaTillBest(produktId){
+
+        localStorage.setItem("produktId", produktId);
+
+        location.replace("order.html");
+
+      }
+      
+    </script>
+   
+  </body>
+</html>
